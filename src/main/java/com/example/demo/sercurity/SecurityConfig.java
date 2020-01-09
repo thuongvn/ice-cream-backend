@@ -20,7 +20,21 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("OPTIONS");
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("POST");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("DELETE");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
     @Bean
     public FilterRegistrationBean filterRegistrationBean(){
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -43,6 +57,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/user/login").permitAll()
+                .antMatchers(HttpMethod.GET,"/product").permitAll()
+                .antMatchers(HttpMethod.POST,"/product").permitAll()
+                .antMatchers(HttpMethod.GET,"/product").permitAll()
+                .antMatchers(HttpMethod.DELETE,"/product").permitAll()
                 .antMatchers(HttpMethod.POST,"/user").permitAll()
 //                .antMatchers("/api/test-security/profile").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET,"/user").hasRole("ADMIN")
