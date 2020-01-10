@@ -14,7 +14,7 @@ public class UserDto {
     private String email;
     private String full_name;
     private String phone;
-//    private float total_cash;
     private String avatar;
     private String token;
+    private String role;
 }

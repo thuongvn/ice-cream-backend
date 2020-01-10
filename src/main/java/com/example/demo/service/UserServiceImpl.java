@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService{
         user.setPassword(createUserRequest.getPassword());
         user.setAvatar(createUserRequest.getAvatar());
         user.setBirthday(createUserRequest.getBirthday());
-//        user.setTotal_cash(createUserRequest.getTotal_cash());
+
         user.setRoles(createUserRequest.getRole());
         userRepository.save(user);
         return UserMapper.toUserDto(user);
