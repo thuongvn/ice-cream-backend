@@ -16,4 +16,5 @@ public class UserDto {
     private String phone;
 //    private float total_cash;
     private String avatar;
+    private String token;
 }

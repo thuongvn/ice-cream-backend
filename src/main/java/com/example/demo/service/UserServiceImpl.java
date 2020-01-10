@@ -89,13 +89,15 @@ public class UserServiceImpl implements UserService{
 //        return userDtos;
         return userRepository.findAll();
     }
-    public String login(String email, String password){
+    public UserDto login(String email, String password){
         try{
             User user = userRepository.findByEmail(email);
+
             if(user!=null){
                 if(password.equalsIgnoreCase(user.getPassword())){
                     UserDto userDto = UserMapper.toUserDto(user);
-                    return JwtUtils.generateToken(user);
+                    userDto.setToken(JwtUtils.generateToken(user));
+                    return userDto;
                 }
                 return null;
             }else{

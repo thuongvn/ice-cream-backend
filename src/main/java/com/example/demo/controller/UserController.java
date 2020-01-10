@@ -30,11 +30,11 @@ public class UserController {
         // Gọi đến method trong service xử lý đăng nhập
         // Gen token trả về client bằng cách gọi hàm, truyền entity User vào
         // JwtUltis.generateToken(user);
-        String resultJWT = userService.login(createUserRequest.getEmail(), createUserRequest.getPassword());
-        if(resultJWT == null){
-            resultJWT = "Login faill";
+        UserDto userDto = userService.login(createUserRequest.getEmail(), createUserRequest.getPassword());
+        if(userDto == null){
+            return ResponseEntity.ok("Login faill");
         }
-        return ResponseEntity.ok(resultJWT);
+        return ResponseEntity.ok(userDto);
     }
 
 

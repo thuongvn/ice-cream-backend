@@ -56,14 +56,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/user/login").permitAll()
+
+                //product
                 .antMatchers(HttpMethod.GET,"/product").permitAll()
-                .antMatchers(HttpMethod.POST,"/product").permitAll()
-                .antMatchers(HttpMethod.GET,"/product").permitAll()
-                .antMatchers(HttpMethod.DELETE,"/product").permitAll()
+                .antMatchers(HttpMethod.POST,"/product").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/product/search").permitAll()
+                .antMatchers(HttpMethod.DELETE,"/product/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/product/{id}").permitAll()
+                .antMatchers(HttpMethod.PUT,"/product/{id}").hasRole("ADMIN")
+                //user
                 .antMatchers(HttpMethod.POST,"/user").permitAll()
-//                .antMatchers("/api/test-security/profile").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/user/login").permitAll()
                 .antMatchers(HttpMethod.GET,"/user").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/user").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/user/{id}").permitAll()
+                .antMatchers(HttpMethod.PUT,"/user/{id}").hasAnyRole("ADMIN","CUSTOMER")
+                //store
+                .antMatchers(HttpMethod.GET,"/store").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/store").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/store/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/store/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/store/{id}").hasRole("ADMIN")
+                //store-have-product
+
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

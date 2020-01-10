@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public interface UserService {
-    public String login(String email, String password);
+    public UserDto login(String email, String password);
     public UserDto createUser(CreateUserRequest createUserRequest);
     public UserDto updateUser(CreateUserRequest createUserRequest, int id);
     public UserDto deleteUser(int id);
