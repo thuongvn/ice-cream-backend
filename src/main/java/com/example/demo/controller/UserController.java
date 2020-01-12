@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Product;
 import com.example.demo.entity.User;
+import com.example.demo.model.detail.ListUserDto;
 import com.example.demo.model.detail.UserDto;
 import com.example.demo.model.request.CreateUserRequest;
 import com.example.demo.model.request.Login;
@@ -23,8 +24,15 @@ import javax.validation.Valid;
 public class UserController {
     @Autowired(required = false)
     private UserService userService;
-
-
+    @ApiOperation(value = "get user want to become store", response = UserDto.class)
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal Server Error"),
+    })
+    @GetMapping("get-user-register")
+    public ResponseEntity<?> getUserRegister(@RequestBody @Valid Login createUserRequest) {
+        return ResponseEntity.ok(userService.getCustomerWantToStore());
+    }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid Login createUserRequest) {
         // Gọi đến method trong service xử lý đăng nhập
@@ -38,13 +46,19 @@ public class UserController {
     }
 
 
-    @ApiOperation(value = "create a User", response = UserDto.class)
+    @ApiOperation(value = "create a User : \t\"email\":\"test@gmail.com\",\n" +
+            "\t\"password\": \"123456\",\n" +
+            "\t\"fullName\": \"Sam Smith\",\n" +
+            "\t\"address\": \"Ha Noi\",\n" +
+            "\t\"numberphone\": \"0916016972\",\n" +
+            "\t\"role\":\"CUSTOMER\",\n" +
+            "\t\"birthday\":\"1997/10/24\"", response = UserDto.class)
     @ApiResponses({
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @PostMapping("")
-    public ResponseEntity<?> createProduct(@RequestBody CreateUserRequest createUserRequest) {
+    public ResponseEntity<?> createProduct(@RequestBody @Valid CreateUserRequest createUserRequest) {
 
         UserDto userDto = userService.createUser(createUserRequest);
         return ResponseEntity.ok(userDto);
@@ -70,15 +84,15 @@ public class UserController {
         return ResponseEntity.ok(userService.deleteUser(id));
     }
 
-    @ApiOperation(value = "Get list of user", response = UserDto.class)
-    @ApiResponses({
-            @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 500, message = "Internal Server Error"),
-    })
-    @GetMapping("")
-    public ResponseEntity<?> getListUser(){
-        return ResponseEntity.ok(userService.getAllUser());
-    }
+//    @ApiOperation(value = "Get list of user", response = UserDto.class)
+//    @ApiResponses({
+//            @ApiResponse(code = 400, message = "Bad request"),
+//            @ApiResponse(code = 500, message = "Internal Server Error"),
+//    })
+//    @GetMapping("")
+//    public ResponseEntity<?> getListUser(){
+//        return ResponseEntity.ok(userService.getAllUser());
+//    }
 
     @ApiOperation(value = "Update user by id", response = UserDto.class)
     @ApiResponses({
@@ -91,5 +105,17 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(createUserRequest,id));
     }
 
+
+    @ApiOperation(value = "Get a list of user", response = UserDto.class, responseContainer = "List")
+    @ApiResponses({
+            @ApiResponse(code = 500, message="Internal Server Error")
+    })
+    @GetMapping("")
+    public ResponseEntity<?> getListUser(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(defaultValue = "1") int page) {
+        ListUserDto users = userService.getUserByWithPagging(keyword, page-1);
+        return ResponseEntity.ok(users);
+    }
 
 }

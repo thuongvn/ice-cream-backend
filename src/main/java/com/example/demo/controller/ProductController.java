@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Product;
+import com.example.demo.model.detail.ProductDTO;
+import com.example.demo.model.request.CreateProduct;
 import com.example.demo.service.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -25,9 +28,14 @@ public class ProductController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @PostMapping("")
-    public ResponseEntity<?> createProduct(@RequestBody Product createProductRequest) {
-        Product product = productService.createProduct(createProductRequest);
-        return ResponseEntity.ok(product);
+    public ResponseEntity<?> createProduct(@RequestBody @Valid CreateProduct createProductRequest) {
+        ProductDTO productDTO = productService.createProduct(createProductRequest);
+        if(productDTO!=null){
+            return ResponseEntity.ok(productDTO);
+        }else{
+            return ResponseEntity.ok("create product faill");
+        }
+
     }
 
     @ApiOperation(value = "Update info of a product", response = Product.class)
@@ -36,9 +44,14 @@ public class ProductController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@RequestBody Product product_update, @PathVariable int id) {
-        Product product = productService.updateProduct(product_update, id);
-        return ResponseEntity.ok(product);
+    public ResponseEntity<?> updateProduct(@RequestBody @Valid CreateProduct product_update, @PathVariable int id) {
+        ProductDTO product = productService.updateProduct(product_update, id);
+        if(product!=null){
+            return ResponseEntity.ok(product);
+        }else {
+            return ResponseEntity.ok("product can not update");
+        }
+
     }
 
     @ApiOperation(value = "Delete a product by id", response = Product.class)

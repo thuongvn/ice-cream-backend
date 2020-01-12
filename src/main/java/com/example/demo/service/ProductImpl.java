@@ -1,6 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Product;
+import com.example.demo.model.detail.ProductDTO;
+import com.example.demo.model.mapper.ProductMapper;
+import com.example.demo.model.request.CreateProduct;
 import com.example.demo.repository.ProductRepository;
 import org.apache.lucene.search.Query;
 import org.hibernate.search.jpa.FullTextEntityManager;
@@ -10,6 +13,7 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -20,30 +24,41 @@ public class ProductImpl implements ProductService {
 //    private EntityManager entityManager;
 
     @Override
-    public Product createProduct(Product product) {
-        if(product.getProduct_name()!=null && product.getProduct_name() != "") {
+    public ProductDTO createProduct(CreateProduct createProduct) {
+        try{
+            Product product = new Product();
+            product.setProduct_name(createProduct.getProduct_name());
+            product.setDescription(createProduct.getDescription());
+            product.setImages(createProduct.getImages());
+            product.setPrice(createProduct.getPrice());
+            product.setCreate_at(new Date(System.currentTimeMillis()));
             productRepository.save(product);
-            return product;
-        }else{
+            return ProductMapper.toProductDTO(product);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
             return null;
         }
+
     }
 
     @Override
-    public Product updateProduct(Product product, int id) {
-        Product products = productRepository.findById(id).get();
-        if(product.getProduct_name()!=null && product.getProduct_name() != ""){
+    public ProductDTO updateProduct(CreateProduct product, int id) {
+        try{
+            Product products = productRepository.findById(id).get();
+
 
             products.setProduct_name(product.getProduct_name());
             products.setDescription(product.getDescription());
-            products.setCartItems(product.getCartItems());
-            products.setCreate_at(product.getCreate_at());
-            products.setUpdate_at(product.getUpdate_at());
+            products.setUpdate_at(new Date(System.currentTimeMillis()));
             products.setImages(product.getImages());
             products.setPrice(product.getPrice());
+
             productRepository.save(products);
+            return ProductMapper.toProductDTO(products);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
         }
-        return productRepository.findById(id).get();
     }
 
     @Override

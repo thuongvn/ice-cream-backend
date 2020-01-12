@@ -27,6 +27,7 @@ public class CreateUserRequest {
     )
     private String email;
 
+    @NotNull
     @Pattern(regexp="(09|01[2|6|8|9])+([0-9]{8})\\b", message = "Please provide a valid phone number")
     @ApiModelProperty(
             example="0916016972",
@@ -54,6 +55,7 @@ public class CreateUserRequest {
     )
     private String password;
 
+
     @Valid
     @URL(regexp="(https?:\\/\\/.*\\.(?:png|jpg))", message="Avatar must be an url image")
     @ApiModelProperty(
@@ -73,5 +75,14 @@ public class CreateUserRequest {
 
     private float total_cash;
 
+    @NotNull(message = "Role is required")
+    @NotEmpty(message = "Role is required")
+    @ApiModelProperty(
+            example="ADMIN / CUSTOMER / STORE",
+            notes="Role cannot be empty",
+            required=true
+    )
     private String role;
+    //kiem tra mong muon tro thanh store
+    private Boolean status;
 }

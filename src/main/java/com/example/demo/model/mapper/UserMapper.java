@@ -9,12 +9,11 @@ public class UserMapper {
 
         userDto.setId(user.getId());
         userDto.setAvatar(user.getAvatar());
-//        userDto.setTotal_cash(user.getTotal_cash());
         userDto.setEmail(user.getEmail());
         userDto.setFull_name(user.getFull_name());
         userDto.setPhone(user.getNumberphone());
         userDto.setRole(user.getRoles());
-
+        userDto.setStatus(user.getStatus());
         return userDto;
     }
 }

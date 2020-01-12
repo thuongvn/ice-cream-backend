@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import com.sun.istack.NotNull;
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -20,16 +21,20 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     @NotNull
     @Column(name="email", unique = true)
     private String email;
 
+    @NotNull
     @Column(name="password")
     private String password;
 
+    @NotNull
     @Column(name="full_name")
     private String full_name;
 
+    @NotNull
     @Column(name="numberphone")
     private String numberphone;
 
@@ -45,6 +50,9 @@ public class User implements Serializable {
 
     @Column(name="role")
     private String roles;
+
+    @Column(name="status")
+    private Boolean status;
 
     @OneToMany(mappedBy = "user")
     private List<CartItem> cartItems;

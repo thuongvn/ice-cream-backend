@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Product;
 import com.example.demo.entity.StoreHaveProduct;
+import com.example.demo.model.request.UpdateQuantityOfProduct;
 import com.example.demo.service.ProductService;
 import com.example.demo.service.StoreHaveProductService;
 import io.swagger.annotations.Api;
@@ -19,7 +20,7 @@ public class StoreHaveProductController {
     @Autowired
     private StoreHaveProductService storeHaveProductService;
 
-    @ApiOperation(value = "create a store have product", response = StoreHaveProduct.class)
+    @ApiOperation(value = "create product of store", response = StoreHaveProduct.class)
     @ApiResponses({
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal Server Error"),
@@ -28,5 +29,31 @@ public class StoreHaveProductController {
     public ResponseEntity<?> createProduct(@RequestBody StoreHaveProduct storeHaveProduct,@PathVariable int id) {
         StoreHaveProduct s = storeHaveProductService.createStoreHaveProduct(storeHaveProduct,id);
         return ResponseEntity.ok(s);
+    }
+
+    @ApiOperation(value = "update product of store", response = StoreHaveProduct.class)
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal Server Error"),
+    })
+    @PutMapping("")
+    public ResponseEntity<?> update(@RequestBody UpdateQuantityOfProduct storeHaveProduct) {
+        StoreHaveProduct s = storeHaveProductService.updateStoreHaveProduct(storeHaveProduct);
+        if(s!=null){
+            return ResponseEntity.ok(s);
+        }else{
+            return ResponseEntity.ok("update faill");
+        }
+
+    }
+
+    @ApiOperation(value = "list all product of store", response = StoreHaveProduct.class)
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal Server Error"),
+    })
+    @GetMapping("")
+    public ResponseEntity<?> listAll() {
+        return ResponseEntity.ok(storeHaveProductService.getAllStoreHaveProduct());
     }
 }

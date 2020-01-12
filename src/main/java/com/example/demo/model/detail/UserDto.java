@@ -17,4 +17,5 @@ public class UserDto {
     private String avatar;
     private String token;
     private String role;
+    private Boolean status;
 }
