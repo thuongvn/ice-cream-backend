@@ -7,6 +7,7 @@ import com.example.demo.model.mapper.UserMapper;
 import com.example.demo.model.request.CreateUserRequest;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.ultil.JwtUtils;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,7 +29,7 @@ public class UserServiceImpl implements UserService{
         user.setEmail(createUserRequest.getEmail());
         user.setFull_name(createUserRequest.getFullName());
         user.setNumberphone(createUserRequest.getNumberphone());
-        user.setPassword(createUserRequest.getPassword());
+        user.setPassword(BCrypt.hashpw(createUserRequest.getPassword(), BCrypt.gensalt(12)));
         user.setAvatar(createUserRequest.getAvatar());
         user.setBirthday(createUserRequest.getBirthday());
 //        user.setTotal_cash(createUserRequest.getTotal_cash());
@@ -98,15 +99,13 @@ public class UserServiceImpl implements UserService{
             User user = userRepository.findByEmail(email);
 
             if(user!=null){
-                if(password.equalsIgnoreCase(user.getPassword())){
+                if(BCrypt.checkpw(password,user.getPassword())){
                     UserDto userDto = UserMapper.toUserDto(user);
                     userDto.setToken(JwtUtils.generateToken(user));
                     return userDto;
                 }
-                return null;
-            }else{
-                return null;
             }
+            return null;
         }catch (Exception e){
             return null;
         }
