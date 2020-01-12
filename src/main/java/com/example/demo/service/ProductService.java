@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Product;
+import com.example.demo.model.detail.ListProductDto;
 import com.example.demo.model.detail.ProductDTO;
 import com.example.demo.model.request.CreateProduct;
 import org.springframework.stereotype.Service;
@@ -14,5 +15,5 @@ public interface ProductService {
     public boolean deleteProduct(int id);
     public List<Product> getAllProduct();
     public Product getProductById(int id);
-    public List<Product> getProducstByFreeText(String keyword);
+    public ListProductDto getAllProducst(String keyword, int page);
 }

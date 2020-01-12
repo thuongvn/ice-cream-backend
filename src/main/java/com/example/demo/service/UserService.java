@@ -15,9 +15,8 @@ public interface UserService {
     public UserDto updateUser(CreateUserRequest createUserRequest);
     public UserDto deleteUser(int id);
     public UserDto getUserById(int id);
-    public List<User> getAllUser();
     public List<UserDto> getCustomerWantToStore();
-    public ListUserDto getUserByWithPagging(String keyword, int page);
+    public ListUserDto getAllUser(String keyword, int page);
 
 //    public User createUser(User createUserRequest);
 //    public User updateUser(CreateUserRequest createUserRequest);

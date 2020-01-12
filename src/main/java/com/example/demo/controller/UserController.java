@@ -120,7 +120,7 @@ public class UserController {
     public ResponseEntity<?> getListUser(
             @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(defaultValue = "1") int page) {
-        ListUserDto users = userService.getUserByWithPagging(keyword, page-1);
+        ListUserDto users = userService.getAllUser(keyword, page-1);
         return ResponseEntity.ok(users);
     }
 

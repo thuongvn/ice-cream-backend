@@ -1,8 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Product;
+import com.example.demo.entity.User;
+import com.example.demo.model.detail.ListProductDto;
+import com.example.demo.model.detail.ListUserDto;
 import com.example.demo.model.detail.ProductDTO;
+import com.example.demo.model.detail.UserDto;
 import com.example.demo.model.mapper.ProductMapper;
+import com.example.demo.model.mapper.UserMapper;
 import com.example.demo.model.request.CreateProduct;
 import com.example.demo.repository.ProductRepository;
 import org.apache.lucene.search.Query;
@@ -11,8 +16,11 @@ import org.hibernate.search.jpa.FullTextQuery;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -85,22 +93,20 @@ public class ProductImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProducstByFreeText(String keyword) {
-//        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
-//
-//        QueryBuilder queryBuilder = fullTextEntityManager.getSearchFactory()
-//                .buildQueryBuilder()
-//                .forEntity(Product.class)
-//                .get();
-//
-//        Query query = queryBuilder
-//                .keyword()
-//                .onField("product_name")
-//                .matching(keyword)
-//                .createQuery();
-//        FullTextQuery jpaQuery = fullTextEntityManager.createFullTextQuery(query, Product.class);
-//        List<Product> results = jpaQuery.getResultList();
-        return null;
+    public ListProductDto getAllProducst(String keyword, int page){
+
+        // Phân trang + sắp xếp
+        if(keyword==null){
+            keyword="";
+        }
+        Page<Product> rs = productRepository.searchProduct(keyword, PageRequest.of(page,5));
+        List<Product> products = rs.getContent();
+
+        ListProductDto list = new ListProductDto();
+        list.setTotalItems(rs.getTotalElements());
+        list.setTotalPages(rs.getTotalPages());
+        list.setList(products);
+        return list;
     }
 
 }

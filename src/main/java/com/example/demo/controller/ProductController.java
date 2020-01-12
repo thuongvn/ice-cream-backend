@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Product;
+import com.example.demo.model.detail.ListProductDto;
 import com.example.demo.model.detail.ProductDTO;
 import com.example.demo.model.request.CreateProduct;
 import com.example.demo.service.ProductService;
@@ -75,24 +76,33 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductById(id));
     }
 
-    @ApiOperation(value = "Get all of product", response = Product.class)
+
+
+//    @GetMapping("")
+//    public ResponseEntity<?> getAllProduct(){
+//        return ResponseEntity.ok(productService.getAllProduct());
+//    }
+//
+//    @ApiOperation(value = "Get products by free text", response = Product.class)
+//    @ApiResponses({
+//            @ApiResponse(code = 400, message = "Bad request"),
+//            @ApiResponse(code = 500, message = "Internal Server Error"),
+//    })
+    @ApiOperation(value = "Get all of product, can search", response = Product.class)
     @ApiResponses({
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @GetMapping("")
-    public ResponseEntity<?> getAllProduct(){
-        return ResponseEntity.ok(productService.getAllProduct());
-    }
+    public ResponseEntity<?> getAllProduct(
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(defaultValue = "1") int page){
+        ListProductDto productDtos = productService.getAllProducst(keyword,page-1);
+        if(productDtos!=null){
+            return ResponseEntity.ok(productDtos);
+        }else {
+            return ResponseEntity.ok("Faill");
+        }
 
-    @ApiOperation(value = "Get products by free text", response = Product.class)
-    @ApiResponses({
-            @ApiResponse(code = 400, message = "Bad request"),
-            @ApiResponse(code = 500, message = "Internal Server Error"),
-    })
-    @GetMapping("/search")
-    public ResponseEntity<?> getProductByFreeText(@RequestParam String searching){
-        List<Product> p = productService.getProducstByFreeText(searching);
-        return ResponseEntity.ok(p);
     }
 }

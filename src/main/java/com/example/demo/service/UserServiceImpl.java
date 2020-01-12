@@ -93,24 +93,6 @@ public class UserServiceImpl implements UserService{
         return userDto;
     }
 
-    @Override
-    public List<User> getAllUser() {
-        List<UserDto> userDtos = null;
-
-//        try{
-//            List<User> users = userRepository.findAll();
-//
-//            for (int i = 0; i< users.size();i++){
-//                userDtos.add(UserMapper.toUserDto(users.get(i)));
-//            }
-//        }catch (Exception e) {
-//            System.out.println("ERROR: " +e.getMessage());
-//
-//        }
-
-//        return userDtos;
-        return userRepository.findAll();
-    }
     public UserDto login(String email, String password){
         try{
             User user = userRepository.findByEmail(email);
@@ -147,7 +129,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public ListUserDto getUserByWithPagging(String keyword, int page) {
+    public ListUserDto getAllUser(String keyword, int page) {
         // Phân trang + sắp xếp
         if(keyword==null){
             keyword="";
@@ -156,8 +138,8 @@ public class UserServiceImpl implements UserService{
 
 
         List<User> listUser = rs.getContent();
-        List<UserDto> listUserDto = new ArrayList<>();
 
+        List<UserDto> listUserDto = new ArrayList<>();
         for(User u : listUser){
             listUserDto.add(UserMapper.toUserDto(u));
         }
