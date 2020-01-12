@@ -32,7 +32,8 @@ public class UserServiceImpl implements UserService{
         user.setAvatar(createUserRequest.getAvatar());
         user.setBirthday(createUserRequest.getBirthday());
 //        user.setTotal_cash(createUserRequest.getTotal_cash());
-        user.setRoles(createUserRequest.getRole());
+        user.setStatus(createUserRequest.getStatus());
+        user.setRoles("CUSTOMER");
         //neu khi tao, nguoi dung k yeu cau gi, thi yeu cau thanh store se coi nhu k co
         if(createUserRequest.getStatus()==null){
             user.setStatus(false);
@@ -45,18 +46,27 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDto updateUser(CreateUserRequest createUserRequest, int id) {
-        User user = userRepository.findById(id).get();
-        user.setEmail(createUserRequest.getEmail());
-        user.setFull_name(createUserRequest.getFullName());
-        user.setNumberphone(createUserRequest.getNumberphone());
-        user.setPassword(createUserRequest.getPassword());
-        user.setAvatar(createUserRequest.getAvatar());
-        user.setBirthday(createUserRequest.getBirthday());
+    public UserDto updateUser(CreateUserRequest createUserRequest) {
 
-        user.setRoles(createUserRequest.getRole());
-        userRepository.save(user);
-        return UserMapper.toUserDto(user);
+        try{
+            User user = userRepository.findByEmail(createUserRequest.getEmail());
+            user.setFull_name(createUserRequest.getFullName());
+            user.setNumberphone(createUserRequest.getNumberphone());
+            user.setPassword(createUserRequest.getPassword());
+            user.setAvatar(createUserRequest.getAvatar());
+            user.setBirthday(createUserRequest.getBirthday());
+
+            user.setRoles(createUserRequest.getRole());
+            if(createUserRequest.getRole().equals("CUSTOMER")){
+                user.setStatus(false);
+            }
+            userRepository.save(user);
+            return UserMapper.toUserDto(user);
+        }catch (Exception e){
+            System.out.println(e);
+            return null;
+        }
+
     }
 
     @Override

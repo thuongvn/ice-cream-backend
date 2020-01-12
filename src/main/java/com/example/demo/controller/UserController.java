@@ -94,15 +94,21 @@ public class UserController {
 //        return ResponseEntity.ok(userService.getAllUser());
 //    }
 
-    @ApiOperation(value = "Update user by id", response = UserDto.class)
+    @ApiOperation(value = "Update user by email", response = UserDto.class)
     @ApiResponses({
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updatetUserById(@RequestBody CreateUserRequest createUserRequest,@PathVariable int id){
+    @PutMapping("")
+    public ResponseEntity<?> updatetUserById(@RequestBody CreateUserRequest createUserRequest){
 
-        return ResponseEntity.ok(userService.updateUser(createUserRequest,id));
+        UserDto user = userService.updateUser(createUserRequest);
+        if(user !=null){
+            return ResponseEntity.ok(user);
+        }else{
+            return ResponseEntity.ok("update faill");
+        }
+
     }
 
 

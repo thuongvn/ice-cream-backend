@@ -75,12 +75,11 @@ public class CreateUserRequest {
 
     private float total_cash;
 
-    @NotNull(message = "Role is required")
-    @NotEmpty(message = "Role is required")
+
     @ApiModelProperty(
             example="ADMIN / CUSTOMER / STORE",
             notes="Role cannot be empty",
-            required=true
+            required=false
     )
     private String role;
     //kiem tra mong muon tro thanh store

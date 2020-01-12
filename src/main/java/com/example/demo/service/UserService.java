@@ -12,7 +12,7 @@ import java.util.List;
 public interface UserService {
     public UserDto login(String email, String password);
     public UserDto createUser(CreateUserRequest createUserRequest);
-    public UserDto updateUser(CreateUserRequest createUserRequest, int id);
+    public UserDto updateUser(CreateUserRequest createUserRequest);
     public UserDto deleteUser(int id);
     public UserDto getUserById(int id);
     public List<User> getAllUser();
