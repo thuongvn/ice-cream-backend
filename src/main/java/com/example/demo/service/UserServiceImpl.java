@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
@@ -36,11 +36,14 @@ public class UserServiceImpl implements UserService{
         user.setStatus(createUserRequest.getStatus());
         user.setRoles("CUSTOMER");
         //neu khi tao, nguoi dung k yeu cau gi, thi yeu cau thanh store se coi nhu k co
-        if(createUserRequest.getStatus()==null){
+        if (createUserRequest.getStatus() == null) {
             user.setStatus(false);
-        }else {
+        } else {
             user.setStatus(createUserRequest.getStatus());
         }
+
+        user.setGender(createUserRequest.getGender());
+        user.setAddress(createUserRequest.getAddress());
 
         userRepository.save(user);
         return UserMapper.toUserDto(user);
@@ -49,7 +52,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDto updateUser(CreateUserRequest createUserRequest) {
 
-        try{
+        try {
             User user = userRepository.findByEmail(createUserRequest.getEmail());
             user.setFull_name(createUserRequest.getFullName());
             user.setNumberphone(createUserRequest.getNumberphone());
@@ -58,12 +61,12 @@ public class UserServiceImpl implements UserService{
             user.setBirthday(createUserRequest.getBirthday());
 
             user.setRoles(createUserRequest.getRole());
-            if(createUserRequest.getRole().equals("CUSTOMER")){
+            if (createUserRequest.getRole().equals("CUSTOMER")) {
                 user.setStatus(false);
             }
             userRepository.save(user);
             return UserMapper.toUserDto(user);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
             return null;
         }
@@ -85,7 +88,7 @@ public class UserServiceImpl implements UserService{
         try {
             User user = userRepository.findById(id).get();
             userDto = UserMapper.toUserDto(user);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("ERROR: " + e.getMessage());
 
         }
@@ -94,35 +97,35 @@ public class UserServiceImpl implements UserService{
         return userDto;
     }
 
-    public UserDto login(String email, String password){
-        try{
+    public UserDto login(String email, String password) {
+        try {
             User user = userRepository.findByEmail(email);
 
-            if(user!=null){
-                if(BCrypt.checkpw(password,user.getPassword())){
+            if (user != null) {
+                if (BCrypt.checkpw(password, user.getPassword())) {
                     UserDto userDto = UserMapper.toUserDto(user);
                     userDto.setToken(JwtUtils.generateToken(user));
                     return userDto;
                 }
             }
             return null;
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
 
     @Override
-    public List<UserDto> getCustomerWantToStore(){
+    public List<UserDto> getCustomerWantToStore() {
 
         try {
             List<User> listUser = userRepository.findAllByStatus(true);
             List<UserDto> listUserDto = new ArrayList<>();
 
-            for(User u : listUser){
+            for (User u : listUser) {
                 listUserDto.add(UserMapper.toUserDto(u));
             }
             return listUserDto;
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
@@ -130,16 +133,16 @@ public class UserServiceImpl implements UserService{
     @Override
     public ListUserDto getAllUser(String keyword, int page) {
         // Phân trang + sắp xếp
-        if(keyword==null){
-            keyword="";
+        if (keyword == null) {
+            keyword = "";
         }
-         Page<User> rs = userRepository.searchUser(keyword, PageRequest.of(page,5));
+        Page<User> rs = userRepository.searchUser(keyword, PageRequest.of(page, 5));
 
 
         List<User> listUser = rs.getContent();
 
         List<UserDto> listUserDto = new ArrayList<>();
-        for(User u : listUser){
+        for (User u : listUser) {
             listUserDto.add(UserMapper.toUserDto(u));
         }
 
@@ -148,6 +151,23 @@ public class UserServiceImpl implements UserService{
         list.setTotalPages(rs.getTotalPages());
         list.setList(listUserDto);
         return list;
+    }
+
+    //for mobile
+    @Override
+    public List<UserDto> getAllUserForMobile() {
+        try {
+            List<User> list = userRepository.findAll();
+            List<UserDto> listUserDto = new ArrayList<>();
+            for (User u : list) {
+                listUserDto.add(UserMapper.toUserDto(u));
+            }
+            return listUserDto;
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+
     }
 
 }

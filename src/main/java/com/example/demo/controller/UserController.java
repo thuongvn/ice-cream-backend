@@ -12,8 +12,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -42,6 +45,7 @@ public class UserController {
         if(userDto == null){
             return ResponseEntity.ok("Login faill");
         }
+
         return ResponseEntity.ok(userDto);
     }
 
@@ -120,6 +124,8 @@ public class UserController {
     public ResponseEntity<?> getListUser(
             @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(defaultValue = "1") int page) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        int id = (Integer)auth.getPrincipal();
         ListUserDto users = userService.getAllUser(keyword, page-1);
         return ResponseEntity.ok(users);
     }

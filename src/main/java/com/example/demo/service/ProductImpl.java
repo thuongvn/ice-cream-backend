@@ -92,6 +92,7 @@ public class ProductImpl implements ProductService {
         return product;
     }
 
+    //for web
     @Override
     public ListProductDto getAllProducst(String keyword, int page){
 
@@ -107,6 +108,12 @@ public class ProductImpl implements ProductService {
         list.setTotalPages(rs.getTotalPages());
         list.setList(products);
         return list;
+    }
+
+    //for front-end
+    @Override
+    public List<Product> getAllProducst() {
+        return productRepository.findAll();
     }
 
 }

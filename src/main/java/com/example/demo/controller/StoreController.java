@@ -5,6 +5,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.Product;
 import com.example.demo.entity.Store;
 
+import com.example.demo.model.request.CreateStore;
 import com.example.demo.service.StoreService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +29,7 @@ public class StoreController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @PostMapping("")
-    public ResponseEntity<?> createStore(@RequestBody Store store) {
+    public ResponseEntity<?> createStore(@RequestBody CreateStore store) {
         Store stores = storeService.createStore(store);
         return ResponseEntity.ok(stores);
     }
@@ -39,7 +40,7 @@ public class StoreController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateStore(@RequestBody Store store, @PathVariable int id) {
+    public ResponseEntity<?> updateStore(@RequestBody CreateStore store, @PathVariable int id) {
         Store stores = storeService.updateStore(store, id);
         return ResponseEntity.ok(stores);
     }

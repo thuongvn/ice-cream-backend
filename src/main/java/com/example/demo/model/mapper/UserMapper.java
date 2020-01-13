@@ -14,6 +14,9 @@ public class UserMapper {
         userDto.setPhone(user.getNumberphone());
         userDto.setRole(user.getRoles());
         userDto.setStatus(user.getStatus());
+        userDto.setGender(user.getGender());
+        userDto.setAddress(user.getAddress());
+        userDto.setBirthday(user.getBirthday());
         return userDto;
     }
 }

@@ -34,5 +34,10 @@ public class Store {
     @OneToMany
     private List<StoreHaveProduct> storeHaveProducts;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
 
 }

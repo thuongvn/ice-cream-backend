@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -18,4 +20,7 @@ public class UserDto {
     private String token;
     private String role;
     private Boolean status;
+    private Boolean gender;
+    private String address;
+    private Date birthday;
 }

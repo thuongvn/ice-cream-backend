@@ -77,17 +77,17 @@ public class ProductController {
     }
 
 
+    @ApiOperation(value = "Get products for mobile", response = Product.class)
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal Server Error"),
+    })
+    @GetMapping("/mobile")
+    public ResponseEntity<?> getAllProduct(){
+        return ResponseEntity.ok(productService.getAllProduct());
+    }
 
-//    @GetMapping("")
-//    public ResponseEntity<?> getAllProduct(){
-//        return ResponseEntity.ok(productService.getAllProduct());
-//    }
-//
-//    @ApiOperation(value = "Get products by free text", response = Product.class)
-//    @ApiResponses({
-//            @ApiResponse(code = 400, message = "Bad request"),
-//            @ApiResponse(code = 500, message = "Internal Server Error"),
-//    })
+
     @ApiOperation(value = "Get all of product, can search", response = Product.class)
     @ApiResponses({
             @ApiResponse(code = 400, message = "Bad request"),

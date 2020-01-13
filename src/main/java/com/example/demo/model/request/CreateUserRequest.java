@@ -84,4 +84,6 @@ public class CreateUserRequest {
     private String role;
     //kiem tra mong muon tro thanh store
     private Boolean status;
+    private Boolean gender;
+    private String address;
 }

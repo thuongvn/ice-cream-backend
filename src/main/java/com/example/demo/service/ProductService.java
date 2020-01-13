@@ -16,4 +16,5 @@ public interface ProductService {
     public List<Product> getAllProduct();
     public Product getProductById(int id);
     public ListProductDto getAllProducst(String keyword, int page);
+    public List<Product> getAllProducst();
 }
