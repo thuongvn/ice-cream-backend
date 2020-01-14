@@ -62,8 +62,7 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user")
     private List<Transaction> transactions;
 
-    @OneToMany(mappedBy = "user")
-    private List<TransactionDetail> transactionDetails;
+
 
     @OneToMany(mappedBy = "user")
     private List<VoucherOfUser> voucherOfUsers;

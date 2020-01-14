@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "transaction_detail")
 @Entity
@@ -20,8 +21,8 @@ public class TransactionDetail {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "transaction_id")
+    private Transaction transaction;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
@@ -35,4 +36,7 @@ public class TransactionDetail {
 
     @Column(name="update_at")
     private Date update_at;
+
+    @Column(name="total_money")
+    private float total_money;
 }

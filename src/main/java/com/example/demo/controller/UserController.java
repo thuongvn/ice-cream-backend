@@ -133,4 +133,22 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+
+    @ApiOperation(value = "Update author of user by id", response = UserDto.class)
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal Server Error"),
+    })
+    @PostMapping("/author")
+    public ResponseEntity<?> author(@RequestParam int id){
+
+        UserDto user = userService.author(id);
+        if(user !=null){
+            return ResponseEntity.ok(user);
+        }else{
+            return ResponseEntity.ok("author faill");
+        }
+
+    }
+
 }

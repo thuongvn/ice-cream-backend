@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+@Data
 @Entity
 @Table(name="transaction")
 public class Transaction {
@@ -13,7 +14,7 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     @ManyToOne
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name="create_at")
@@ -30,5 +31,9 @@ public class Transaction {
     @Column(name = "location")
     private String location;
 
+    @Column(name="status")
+    private int status;
 
+    @OneToMany(mappedBy = "transaction")
+    private List<TransactionDetail> transactionDetails;
 }

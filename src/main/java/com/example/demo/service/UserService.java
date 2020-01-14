@@ -18,7 +18,7 @@ public interface UserService {
     public List<UserDto> getCustomerWantToStore();
     public ListUserDto getAllUser(String keyword, int page);
     public List<UserDto> getAllUserForMobile();
-
+    public UserDto author(int id);
 //    public User createUser(User createUserRequest);
 //    public User updateUser(CreateUserRequest createUserRequest);
 //    public User deleteUser(int id);

@@ -39,5 +39,7 @@ public class Store {
     private User user;
 
 
+    @Column(name = "total_money")
+    private float total_money;
 
 }

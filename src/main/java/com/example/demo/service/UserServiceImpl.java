@@ -137,8 +137,6 @@ public class UserServiceImpl implements UserService {
             keyword = "";
         }
         Page<User> rs = userRepository.searchUser(keyword, PageRequest.of(page, 5));
-
-
         List<User> listUser = rs.getContent();
 
         List<UserDto> listUserDto = new ArrayList<>();
@@ -165,6 +163,17 @@ public class UserServiceImpl implements UserService {
             return listUserDto;
         } catch (Exception e) {
             System.out.println(e);
+            return null;
+        }
+
+    }
+    @Override
+    public UserDto author(int id){
+        try {
+            User user = userRepository.findById(id).get();
+            user.setRoles("STORE");
+            return UserMapper.toUserDto(userRepository.save(user));
+        }catch (Exception e){
             return null;
         }
 
