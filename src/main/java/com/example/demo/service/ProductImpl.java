@@ -100,7 +100,7 @@ public class ProductImpl implements ProductService {
         if(keyword==null){
             keyword="";
         }
-        Page<Product> rs = productRepository.searchProduct(keyword, PageRequest.of(page,5));
+        Page<Product> rs = productRepository.searchProduct(keyword, PageRequest.of(page,6));
         List<Product> products = rs.getContent();
 
         ListProductDto list = new ListProductDto();

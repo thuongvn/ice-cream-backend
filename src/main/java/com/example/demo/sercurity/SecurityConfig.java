@@ -85,7 +85,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 //cartitem
                 .antMatchers("/cartitem").hasRole("CUSTOMER")
-                .antMatchers("/cartitem/test").permitAll()
+                .antMatchers(HttpMethod.POST,"/cartitem/transaction").hasRole("CUSTOMER")
+                .antMatchers(HttpMethod.PUT,"/cartitem/transaction").hasRole("STORE")
+                .antMatchers(HttpMethod.GET,"/cartitem/transaction-store").hasRole("STORE")
+                .antMatchers(HttpMethod.GET,"/cartitem/transaction-customer").hasRole("CUSTOMER")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

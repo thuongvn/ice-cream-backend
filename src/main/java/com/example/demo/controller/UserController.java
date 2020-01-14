@@ -151,4 +151,22 @@ public class UserController {
 
     }
 
+    @ApiOperation(value = "change password  of user by id", response = UserDto.class)
+    @ApiResponses({
+            @ApiResponse(code = 400, message = "Bad request"),
+            @ApiResponse(code = 500, message = "Internal Server Error"),
+    })
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestParam String password){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        int id = (Integer)auth.getCredentials();
+        boolean result = userService.changePassword(password,id);
+        if(result){
+            return ResponseEntity.ok("change password success");
+        }else{
+            return ResponseEntity.ok("change password faill");
+        }
+
+    }
+
 }

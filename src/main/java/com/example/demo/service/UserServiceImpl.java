@@ -136,12 +136,15 @@ public class UserServiceImpl implements UserService {
         if (keyword == null) {
             keyword = "";
         }
-        Page<User> rs = userRepository.searchUser(keyword, PageRequest.of(page, 5));
+        Page<User> rs = userRepository.searchUser(keyword, PageRequest.of(page, 10));
         List<User> listUser = rs.getContent();
 
         List<UserDto> listUserDto = new ArrayList<>();
         for (User u : listUser) {
-            listUserDto.add(UserMapper.toUserDto(u));
+            if(!u.getRoles().equals("ADMIN")){
+                listUserDto.add(UserMapper.toUserDto(u));
+            }
+
         }
 
         ListUserDto list = new ListUserDto();
@@ -167,14 +170,28 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
     @Override
     public UserDto author(int id){
         try {
             User user = userRepository.findById(id).get();
             user.setRoles("STORE");
+            user.setStatus(false);
             return UserMapper.toUserDto(userRepository.save(user));
         }catch (Exception e){
             return null;
+        }
+
+    }
+
+    @Override
+    public boolean changePassword(String password, int user_id) {
+        try {
+            User u = userRepository.findById(user_id).get();
+            u.setPassword(BCrypt.hashpw(password, BCrypt.gensalt(12)));
+            return true;
+        }catch (Exception e){
+            return false;
         }
 
     }

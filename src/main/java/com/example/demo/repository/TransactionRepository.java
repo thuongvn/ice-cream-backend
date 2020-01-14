@@ -10,7 +10,12 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface TransactionRepository  extends JpaRepository<Transaction,Integer> {
-    @Query(nativeQuery = true, value = "SELECT * FROM transaction WHERE user_id LIKE %?1%")
+    @Query(nativeQuery = true, value = "SELECT * FROM transaction WHERE user_id LIKE ?1")
     public Page<Transaction> listTransactionByUser(int user_id, Pageable pageable);
 
+    @Query(nativeQuery = true, value = "SELECT * FROM transaction WHERE status = 0")
+    public Page<Transaction> listTransactionForStore(Pageable pageable);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM transaction WHERE user_id = ?1")
+    public Page<Transaction> listTransactionForCustomer(int id , Pageable pageable);
 }

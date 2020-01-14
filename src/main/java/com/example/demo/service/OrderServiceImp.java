@@ -4,9 +4,7 @@ import com.example.demo.entity.CartItem;
 import com.example.demo.entity.Transaction;
 import com.example.demo.entity.TransactionDetail;
 import com.example.demo.entity.User;
-import com.example.demo.model.detail.CartItemDto;
-import com.example.demo.model.detail.TransactionDetailDto;
-import com.example.demo.model.detail.TransactionDto;
+import com.example.demo.model.detail.*;
 import com.example.demo.model.mapper.TransactionMapper;;
 import com.example.demo.repository.ProductRepository;
 import com.example.demo.repository.TransactionDetailRepository;
@@ -90,6 +88,82 @@ public class OrderServiceImp implements OrderService {
             transactionDetailDtoList.add(TransactionMapper.transactionDetailDto(transactionDetail));
         }
         return transactionDetailDtoList;
+    }
+
+    @Override
+    public TransactionDto createTransactionMobile(int id_user, int quantity, int product) {
+
+        Transaction transaction = new Transaction();
+        transaction.setUser(userRepository.findById(id_user).get());
+        transaction.setCreate_at(new Date(System.currentTimeMillis()));
+        //status = 0: dang giao hang
+        transaction.setStatus(0);
+
+        transaction = transactionRepository.save(transaction);
+
+        TransactionDetail transactionDetail = new TransactionDetail();
+        transactionDetail.setQuantity(quantity);
+        transactionDetail.setProduct(productRepository.findById(product).get());
+        transactionDetail.setCreate_at(new Date(System.currentTimeMillis()));
+        transactionDetail.setTotal_money(productRepository.findById(product).get().getPrice()*quantity);
+        transactionDetail.setTransaction(transaction);
+        transactionDetailRepository.save(transactionDetail);
+
+        transaction.setTotal_price(transactionDetail.getTotal_money());
+        transactionRepository.save(transaction);
+
+        return TransactionMapper.toTransactionDto(transactionRepository.save(transaction));
+    }
+
+    @Override
+    public ListTransactionDto getAllTransactionForStore(int page) {
+        try {
+            Page<Transaction> rs = transactionRepository.listTransactionForStore(PageRequest.of(page,6));
+            List<Transaction> transactions = rs.getContent();
+            List<TransactionDto> listTransactionDto = new ArrayList<>();
+            for(Transaction t : transactions){
+                listTransactionDto.add(TransactionMapper.toTransactionDto(t));
+
+            }
+            ListTransactionDto list = new ListTransactionDto();
+            list.setTotalItems(rs.getTotalElements());
+            list.setTotalPages(rs.getTotalPages());
+            list.setTransactionDtos(listTransactionDto);
+            return list;
+        }catch (Exception e){
+            return null;
+        }
+
+    }
+
+    @Override
+    public ListTransactionDto getAllTransactionForUser(int user_id, int page) {
+        try {
+            Page<Transaction> rs = transactionRepository.listTransactionForCustomer(user_id,PageRequest.of(page,6));
+            List<Transaction> transactions = rs.getContent();
+            List<TransactionDto> listTransactionDto = new ArrayList<>();
+            for(Transaction t : transactions){
+                listTransactionDto.add(TransactionMapper.toTransactionDto(t));
+
+            }
+            ListTransactionDto list = new ListTransactionDto();
+            list.setTotalItems(rs.getTotalElements());
+            list.setTotalPages(rs.getTotalPages());
+            list.setTransactionDtos(listTransactionDto);
+            return list;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    @Override
+    public TransactionDto updateStatusOfOrder(int order_id, int status) {
+        Transaction transaction = transactionRepository.findById(order_id).get();
+        if(status==0||status == 1 || status == 2){
+            transaction.setStatus(status);
+        }
+        return TransactionMapper.toTransactionDto(transaction);
+
     }
 
 
