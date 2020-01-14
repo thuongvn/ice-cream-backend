@@ -53,7 +53,7 @@ public class StoreHaveProductController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @GetMapping("")
-    public ResponseEntity<?> listAll() {
-        return ResponseEntity.ok(storeHaveProductService.getAllStoreHaveProduct());
+    public ResponseEntity<?> listAll(@RequestParam int store_id, @RequestParam int page) {
+        return ResponseEntity.ok(storeHaveProductService.getAllStoreHaveProduct(store_id,page));
     }
 }

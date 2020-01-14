@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 
 import com.example.demo.entity.StoreHaveProduct;
+import com.example.demo.model.detail.ListStoreHaveProduct;
 import com.example.demo.model.request.UpdateQuantityOfProduct;
 import org.springframework.stereotype.Service;
 
@@ -11,5 +12,5 @@ import java.util.List;
 public interface StoreHaveProductService {
     public StoreHaveProduct createStoreHaveProduct(StoreHaveProduct storeHaveProduct, int shop);
     public StoreHaveProduct updateStoreHaveProduct(UpdateQuantityOfProduct updateQuantityOfProduct);
-    public List<StoreHaveProduct> getAllStoreHaveProduct();
+    public ListStoreHaveProduct getAllStoreHaveProduct(int store_id, int page);
 }

@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface StoreHaveProductRepository extends JpaRepository<StoreHaveProduct,Integer> {
-    @Query(nativeQuery = true, value = "SELECT * FROM store_store_have_products WHERE product_name LIKE %?1%")
-    public Page<StoreHaveProduct> searchProduct(int id, Pageable pageable);
+    @Query(nativeQuery = true, value = "SELECT * FROM store_have_products WHERE store_id = ?1")
+    public Page<StoreHaveProduct> findStoreHaveProductByStore(int id, Pageable pageable);
 }

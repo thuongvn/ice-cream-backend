@@ -81,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/store/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT,"/store/{id}").hasRole("ADMIN")
                 //store-have-product
-                .antMatchers("/storehave").hasRole("STORE")
+                .antMatchers("/storehave").permitAll()
 
                 //cartitem
                 .antMatchers("/cartitem").hasRole("CUSTOMER")

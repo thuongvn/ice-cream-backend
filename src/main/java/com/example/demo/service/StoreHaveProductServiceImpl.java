@@ -2,10 +2,13 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Store;
 import com.example.demo.entity.StoreHaveProduct;
+import com.example.demo.model.detail.ListStoreHaveProduct;
 import com.example.demo.model.request.UpdateQuantityOfProduct;
 import com.example.demo.repository.StoreHaveProductRepository;
 import com.example.demo.repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -47,9 +50,15 @@ public class StoreHaveProductServiceImpl implements StoreHaveProductService {
     }
 
     @Override
-    public List<StoreHaveProduct> getAllStoreHaveProduct() {
+    public ListStoreHaveProduct getAllStoreHaveProduct(int store_id, int page) {
         try {
-            return storeHaveProductRepository.findAll();
+            Page<StoreHaveProduct> rs = storeHaveProductRepository.findStoreHaveProductByStore(store_id, PageRequest.of(page-1,5));
+            List<StoreHaveProduct> storeHaveProductsContent= rs.getContent();
+            ListStoreHaveProduct list = new ListStoreHaveProduct();
+            list.setList(storeHaveProductsContent);
+            list.setTotalItems(rs.getTotalElements());
+            list.setTotalPages(rs.getTotalPages());
+            return list;
         }catch (Exception e){
             return null;
         }
