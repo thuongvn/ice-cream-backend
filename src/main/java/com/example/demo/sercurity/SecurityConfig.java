@@ -69,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/user/login").permitAll()
                 .antMatchers(HttpMethod.GET,"/user").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE,"/user").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET,"/user/{id}").permitAll()
+                .antMatchers(HttpMethod.GET,"/user/get-info-user").hasAnyRole("ADMIN","CUSTOMER","STORE")
                 .antMatchers(HttpMethod.PUT,"/user/{id}").hasAnyRole("ADMIN","CUSTOMER")
                 .antMatchers(HttpMethod.GET,"/user/get-user-register").hasRole("ADMIN")
         //
@@ -84,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 //cartitem
                 .antMatchers("/cartitem").hasRole("CUSTOMER")
-
+                .antMatchers("/cartitem/test").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

@@ -16,16 +16,12 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class UpdateQuantityOfProduct {
     @NotNull(message = "Id is required")
-    @NotEmpty(message = "Please provide a id already")
-
     @ApiModelProperty(
             required=true
     )
     private int id;
 
     @NotNull(message = "Quantity is required")
-    @NotEmpty(message = "Please provide a quantity of product on this store")
-
     @ApiModelProperty(
             required=true
     )

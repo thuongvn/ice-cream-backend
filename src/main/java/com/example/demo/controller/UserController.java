@@ -25,17 +25,20 @@ import javax.validation.Valid;
 @RequestMapping("/user")
 @Api(value = "User APIs")
 public class UserController {
-    @Autowired(required = false)
+
+    @Autowired
     private UserService userService;
+
     @ApiOperation(value = "get user want to become store", response = UserDto.class)
     @ApiResponses({
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
-    @GetMapping("get-user-register")
-    public ResponseEntity<?> getUserRegister(@RequestBody @Valid Login createUserRequest) {
+    @GetMapping("/get-user-register")
+    public ResponseEntity<?> getUserRegister() {
         return ResponseEntity.ok(userService.getCustomerWantToStore());
     }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid Login createUserRequest) {
         // Gọi đến method trong service xử lý đăng nhập
@@ -73,8 +76,8 @@ public class UserController {
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable int id){
+    @GetMapping("/get-info-user")
+    public ResponseEntity<?> getUserById(@RequestParam int id){
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
@@ -83,8 +86,8 @@ public class UserController {
             @ApiResponse(code = 400, message = "Bad request"),
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUserById(@PathVariable int id){
+    @DeleteMapping("")
+    public ResponseEntity<?> deleteUserById(@RequestParam int id){
         return ResponseEntity.ok(userService.deleteUser(id));
     }
 
@@ -125,7 +128,7 @@ public class UserController {
             @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(defaultValue = "1") int page) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        int id = (Integer)auth.getPrincipal();
+        int id = (Integer)auth.getCredentials();
         ListUserDto users = userService.getAllUser(keyword, page-1);
         return ResponseEntity.ok(users);
     }
