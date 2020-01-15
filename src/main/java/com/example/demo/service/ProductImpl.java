@@ -102,11 +102,15 @@ public class ProductImpl implements ProductService {
         }
         Page<Product> rs = productRepository.searchProduct(keyword, PageRequest.of(page,6));
         List<Product> products = rs.getContent();
+        List<ProductDTO> productDTOList = new ArrayList<>();
 
+        for(Product p : products){
+            productDTOList.add(ProductMapper.toProductDTO(p));
+        }
         ListProductDto list = new ListProductDto();
         list.setTotalItems(rs.getTotalElements());
         list.setTotalPages(rs.getTotalPages());
-        list.setList(products);
+        list.setList(productDTOList);
         return list;
     }
 
