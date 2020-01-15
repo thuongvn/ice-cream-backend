@@ -13,8 +13,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -185,11 +190,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String saveImage(MultipartFile imageFile) throws Exception {
+        String folder = "/photos/";
+        byte[] bytes = imageFile.getBytes();
+        Path path = Paths.get(folder+System.currentTimeMillis()+imageFile.getOriginalFilename());
+        Files.write(path,bytes);
+        return path.toString();
+    }
+
+    @Override
     public boolean changePassword(String old_password, String new_password, int user_id) {
         try {
             User u = userRepository.findById(user_id).get();
             if(BCrypt.checkpw(old_password, u.getPassword())){
                 u.setPassword(BCrypt.hashpw(new_password, BCrypt.gensalt(12)));
+//                u.setPassword(new_password);
+                userRepository.save(u);
                 return true;
             }
             return false;

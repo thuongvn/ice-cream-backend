@@ -1,15 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.CartItem;
-import com.example.demo.entity.Transaction;
-import com.example.demo.entity.TransactionDetail;
-import com.example.demo.entity.User;
+import com.example.demo.entity.*;
 import com.example.demo.model.detail.*;
 import com.example.demo.model.mapper.TransactionMapper;;
-import com.example.demo.repository.ProductRepository;
-import com.example.demo.repository.TransactionDetailRepository;
-import com.example.demo.repository.TransactionRepository;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +30,10 @@ public class OrderServiceImp implements OrderService {
     @Autowired
     private TransactionDetailRepository transactionDetailRepository;
 
+    @Autowired
+    private StoreRepository storeRepository;
+    @Autowired
+    private StoreHaveProductRepository storeHaveProductRepository;
     @Override
     public TransactionDto createTransaction(int id_user) {
         try {
@@ -112,6 +110,18 @@ public class OrderServiceImp implements OrderService {
         transaction.setTotal_price(transactionDetail.getTotal_money());
         transactionRepository.save(transaction);
 
+        List<Store> stores = storeRepository.findAll();
+
+        for(Store store : stores){
+            int id = store.getId();
+            StoreHaveProduct s = storeHaveProductRepository.findStoreHaveProduct(id).get(0);
+
+            if(quantity<=s.getQuantity()){
+                s.setQuantity(s.getQuantity()-quantity);
+                break;
+            }
+
+        }
         return TransactionMapper.toTransactionDto(transactionRepository.save(transaction));
     }
 

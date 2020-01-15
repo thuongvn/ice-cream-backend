@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -45,7 +46,7 @@ public class UserController {
         // Gen token trả về client bằng cách gọi hàm, truyền entity User vào
         // JwtUltis.generateToken(user);
         UserDto userDto = userService.login(createUserRequest.getEmail(), createUserRequest.getPassword());
-        if(userDto == null){
+        if (userDto == null) {
             return ResponseEntity.ok("Login faill");
         }
 
@@ -77,7 +78,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @GetMapping("/get-info-user")
-    public ResponseEntity<?> getUserById(@RequestParam int id){
+    public ResponseEntity<?> getUserById(@RequestParam int id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
@@ -87,7 +88,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @DeleteMapping("")
-    public ResponseEntity<?> deleteUserById(@RequestParam int id){
+    public ResponseEntity<?> deleteUserById(@RequestParam int id) {
         return ResponseEntity.ok(userService.deleteUser(id));
     }
 
@@ -107,29 +108,45 @@ public class UserController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @PutMapping("")
-    public ResponseEntity<?> updatetUserById(@RequestBody CreateUserRequest createUserRequest){
+    public ResponseEntity<?> updatetUserById(@RequestBody CreateUserRequest createUserRequest, @RequestParam("imageFile") MultipartFile imageFile) {
+        String avatar_link= "";
+        try {
 
-        UserDto user = userService.updateUser(createUserRequest);
-        if(user !=null){
-            return ResponseEntity.ok(user);
-        }else{
-            return ResponseEntity.ok("update faill");
+            try {
+                avatar_link = userService.saveImage(imageFile);
+            }catch (Exception e){
+                System.out.println("img"+e.getMessage());
+            }finally {
+                createUserRequest.setAvatar(avatar_link);
+                UserDto user = userService.updateUser(createUserRequest);
+                if (user != null) {
+                    return ResponseEntity.ok(user);
+                } else {
+                    return ResponseEntity.ok("update faill");
+                }
+            }
+
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
         }
+
 
     }
 
 
     @ApiOperation(value = "Get a list of user", response = UserDto.class, responseContainer = "List")
     @ApiResponses({
-            @ApiResponse(code = 500, message="Internal Server Error")
+            @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @GetMapping("")
     public ResponseEntity<?> getListUser(
             @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(defaultValue = "1") int page) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        int id = (Integer)auth.getCredentials();
-        ListUserDto users = userService.getAllUser(keyword, page-1);
+        int id = (Integer) auth.getCredentials();
+        ListUserDto users = userService.getAllUser(keyword, page - 1);
         return ResponseEntity.ok(users);
     }
 
@@ -140,12 +157,12 @@ public class UserController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @PostMapping("/author")
-    public ResponseEntity<?> author(@RequestParam int id){
+    public ResponseEntity<?> author(@RequestParam int id) {
 
         UserDto user = userService.author(id);
-        if(user !=null){
+        if (user != null) {
             return ResponseEntity.ok(user);
-        }else{
+        } else {
             return ResponseEntity.ok("author faill");
         }
 
@@ -157,10 +174,10 @@ public class UserController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(@RequestParam String old_password,@RequestParam String new_password){
+    public ResponseEntity<?> changePassword(@RequestParam String old_password, @RequestParam String new_password) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        int id = (Integer)auth.getCredentials();
-        boolean result = userService.changePassword(old_password,new_password,id);
+        int id = (Integer) auth.getCredentials();
+        boolean result = userService.changePassword(old_password, new_password, id);
         return ResponseEntity.ok(result);
 //        if(result){
 //            return ResponseEntity.ok("change password success");
