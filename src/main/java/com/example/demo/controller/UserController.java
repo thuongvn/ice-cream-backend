@@ -157,15 +157,16 @@ public class UserController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(@RequestParam String password){
+    public ResponseEntity<?> changePassword(@RequestParam String old_password,@RequestParam String new_password){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         int id = (Integer)auth.getCredentials();
-        boolean result = userService.changePassword(password,id);
-        if(result){
-            return ResponseEntity.ok("change password success");
-        }else{
-            return ResponseEntity.ok("change password faill");
-        }
+        boolean result = userService.changePassword(old_password,new_password,id);
+        return ResponseEntity.ok(result);
+//        if(result){
+//            return ResponseEntity.ok("change password success");
+//        }else{
+//            return ResponseEntity.ok("change password faill");
+//        }
 
     }
 

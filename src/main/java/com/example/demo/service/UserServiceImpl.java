@@ -185,11 +185,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean changePassword(String password, int user_id) {
+    public boolean changePassword(String old_password, String new_password, int user_id) {
         try {
             User u = userRepository.findById(user_id).get();
-            u.setPassword(BCrypt.hashpw(password, BCrypt.gensalt(12)));
-            return true;
+            if(BCrypt.checkpw(old_password, u.getPassword())){
+                u.setPassword(BCrypt.hashpw(new_password, BCrypt.gensalt(12)));
+                return true;
+            }
+            return false;
+
         }catch (Exception e){
             return false;
         }

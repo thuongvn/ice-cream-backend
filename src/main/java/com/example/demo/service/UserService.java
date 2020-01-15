@@ -19,7 +19,7 @@ public interface UserService {
     public ListUserDto getAllUser(String keyword, int page);
     public List<UserDto> getAllUserForMobile();
     public UserDto author(int id);
-    public boolean changePassword(String password, int user_id);
+    public boolean changePassword(String old_password, String new_password, int user_id);
 //    public User createUser(User createUserRequest);
 //    public User updateUser(CreateUserRequest createUserRequest);
 //    public User deleteUser(int id);
