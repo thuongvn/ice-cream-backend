@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Product;
 import com.example.demo.entity.StoreHaveProduct;
+import com.example.demo.model.detail.ListStoreHaveProduct;
+import com.example.demo.model.detail.StoreHaveProductDto;
 import com.example.demo.model.request.UpdateQuantityOfProduct;
 import com.example.demo.service.ProductService;
 import com.example.demo.service.StoreHaveProductService;
@@ -13,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/storehave")
+@RequestMapping("/store-have")
 @Api(value = "Store have product APIs")
 public class StoreHaveProductController {
     @Autowired
@@ -27,7 +31,7 @@ public class StoreHaveProductController {
     })
     @PostMapping("/{id}")
     public ResponseEntity<?> createProduct(@RequestBody StoreHaveProduct storeHaveProduct,@PathVariable int id) {
-        StoreHaveProduct s = storeHaveProductService.createStoreHaveProduct(storeHaveProduct,id);
+        StoreHaveProductDto s = storeHaveProductService.createStoreHaveProduct(storeHaveProduct,id);
         return ResponseEntity.ok(s);
     }
 
@@ -38,7 +42,7 @@ public class StoreHaveProductController {
     })
     @PutMapping("")
     public ResponseEntity<?> update(@RequestBody UpdateQuantityOfProduct storeHaveProduct) {
-        StoreHaveProduct s = storeHaveProductService.updateStoreHaveProduct(storeHaveProduct);
+        StoreHaveProductDto s = storeHaveProductService.updateStoreHaveProduct(storeHaveProduct);
         if(s!=null){
             return ResponseEntity.ok(s);
         }else{
@@ -53,7 +57,12 @@ public class StoreHaveProductController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     @GetMapping("")
-    public ResponseEntity<?> listAll(@RequestParam int store_id, @RequestParam int page) {
-        return ResponseEntity.ok(storeHaveProductService.getAllStoreHaveProduct(store_id,page));
+    public ResponseEntity<?> listAll(@RequestParam int store_id,
+                                     @RequestParam(defaultValue = "1") int page) {
+        ListStoreHaveProduct listStoreHaveProduct = storeHaveProductService.getAllStoreHaveProduct(store_id,page-1);
+        if(listStoreHaveProduct!=null){
+            return ResponseEntity.ok(storeHaveProductService.getAllStoreHaveProduct(store_id,page-1));
+        }
+        return ResponseEntity.ok("Not found ");
     }
 }

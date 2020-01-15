@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 @Data
 public class ListStoreHaveProduct {
-    private List<StoreHaveProduct> list;
+    private List<StoreHaveProductDto> list;
     private int totalPages;
     private long totalItems;
 }

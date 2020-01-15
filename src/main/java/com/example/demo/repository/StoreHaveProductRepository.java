@@ -10,8 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface StoreHaveProductRepository extends JpaRepository<StoreHaveProduct,Integer> {
-    @Query(nativeQuery = true, value = "SELECT * FROM store_have_products WHERE store_id = ?1")
+    @Query(nativeQuery = true, value = "SELECT * FROM store_have_product")
     public Page<StoreHaveProduct> findStoreHaveProductByStore(int id, Pageable pageable);
-    @Query(nativeQuery = true, value = "SELECT * FROM store_have_products WHERE store_id = ?1")
+
+    @Query(nativeQuery = true, value = "SELECT * FROM store_have_product WHERE store_id = ?1")
     public List<StoreHaveProduct> findStoreHaveProduct(int store_id);
 }
