@@ -25,6 +25,6 @@ public interface UserService {
 //    public User createUser(User createUserRequest);
 //    public User updateUser(CreateUserRequest createUserRequest);
 //    public User deleteUser(int id);
-//    public User getUserById(int id);
+    public UserDto getUserByEmail(String email);
 //    public List<User> getListUser(String keyword, int page);
 }

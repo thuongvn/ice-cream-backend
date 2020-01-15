@@ -11,6 +11,7 @@ import java.util.List;
 
 
 public interface UserRepository extends JpaRepository<User, Integer> {
+//    @Query(nativeQuery = true, value = "SELECT * FROM user WHERE email = '?1'")
     public User findByEmail(String email);
     public List<User> findAllByStatus(Boolean status);
 

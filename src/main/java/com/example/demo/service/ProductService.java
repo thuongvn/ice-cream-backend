@@ -13,7 +13,7 @@ public interface ProductService {
     public ProductDTO createProduct(CreateProduct product);
     public ProductDTO updateProduct(CreateProduct product, int id);
     public boolean deleteProduct(int id);
-    public List<Product> getAllProduct();
+    public List<ProductDTO> getAllProduct();
     public Product getProductById(int id);
     public ListProductDto getAllProducst(String keyword, int page);
     public List<Product> getAllProducst();
