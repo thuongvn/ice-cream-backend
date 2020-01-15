@@ -35,12 +35,17 @@ public class ProductImpl implements ProductService {
     public ProductDTO createProduct(CreateProduct createProduct) {
         try{
             Product product = new Product();
+            if(createProduct.getImages()==null){
+                createProduct.setImages("http://lightwidget.com/widgets/empty-photo.jpg");
+            }
             product.setProduct_name(createProduct.getProduct_name());
             product.setDescription(createProduct.getDescription());
             product.setImages(createProduct.getImages());
             product.setPrice(createProduct.getPrice());
             product.setCreate_at(new Date(System.currentTimeMillis()));
+
             productRepository.save(product);
+
             return ProductMapper.toProductDTO(product);
         }catch (Exception e){
             System.out.println(e.getMessage());

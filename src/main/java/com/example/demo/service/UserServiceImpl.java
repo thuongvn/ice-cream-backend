@@ -35,11 +35,12 @@ public class UserServiceImpl implements UserService {
         user.setFull_name(createUserRequest.getFullName());
         user.setNumberphone(createUserRequest.getNumberphone());
         user.setPassword(BCrypt.hashpw(createUserRequest.getPassword(), BCrypt.gensalt(12)));
-        user.setAvatar(createUserRequest.getAvatar());
+//        user.setAvatar(createUserRequest.getAvatar());
         user.setBirthday(createUserRequest.getBirthday());
 //        user.setTotal_cash(createUserRequest.getTotal_cash());
         user.setStatus(createUserRequest.getStatus());
         user.setRoles("CUSTOMER");
+        user.setAvatar("http://lightwidget.com/widgets/empty-photo.jpg");
         //neu khi tao, nguoi dung k yeu cau gi, thi yeu cau thanh store se coi nhu k co
         if (createUserRequest.getStatus() == null) {
             user.setStatus(false);
